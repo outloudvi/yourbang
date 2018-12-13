@@ -1,0 +1,23 @@
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+#taArea {
+  width: 90%;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+  #taArea {
+    width: 100%;
+  }
+}
+
+div {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
