@@ -1,6 +1,6 @@
 {
   "name": "yourbang",
-  "version": "0.1",
+  "version": "1.0",
   "description": "Your own !bang search, just like Duckduckgo but you can define your own bangs.\n\nHow to use: ! <keyword> <item>\n\nExamples: ! google test",
   "author": "Outvi V",
   "background": {
@@ -20,5 +20,10 @@
     "open_in_tab": true
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
-  "manifest_version": 2
+  "manifest_version": 2,
+  "icons": {
+    "48": "icon-48.png",
+    "96": "icon-96.png"
+  },
+  "homepage_url": "https://github.com/outloudvi/yourbang/"
 }
