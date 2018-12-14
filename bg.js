@@ -67,7 +67,7 @@ function initial() {
 Setting = new Setting_Class();
 predefinedSearchs = {
   "bili": "https://bilibili.com/video/%s",
-  "baidu": "https://baidu.com/s?q=%s",
+  "baidu": "https://baidu.com/s?wd=%s",
   "zhwp": "https://zh.wikipedia.org/wiki/%s"
 };
 

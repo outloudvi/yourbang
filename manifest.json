@@ -1,6 +1,6 @@
 {
   "name": "yourbang",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Your own !bang search, just like Duckduckgo but you can define your own bangs.\n\nHow to use: ! <keyword> <item>\n\nExamples: ! google test",
   "author": "Outvi V",
   "background": {
