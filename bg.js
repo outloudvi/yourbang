@@ -106,16 +106,13 @@ browser.omnibox.onInputChanged.addListener((input, suggest) => {
   }
 });
 
-browser.omnibox.onInputEntered.addListener((url, disposition) => {
-  switch (disposition) {
-    case "currentTab":
-      browser.tabs.update({ url });
-      break;
-    case "newForegroundTab":
-      browser.tabs.create({ url });
-      break;
-    case "newBackgroundTab":
-      browser.tabs.create({ url, active: false });
-      break;
+browser.omnibox.onInputEntered.addListener((text, disposition) => {
+  let args = text.split(' ');
+  let url = "https://duckduckgo.com";
+  if (!predefinedSearchs[args[0]]) {
+    url = `https://duckduckgo.com/?q=!${args[0]}+${args.slice(1).join(" ")}`;
+  } else {
+    url = showLink(predefinedSearchs[args[0]], args.slice(1).join(" "));
   }
+      browser.tabs.update({ url });
 });
