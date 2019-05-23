@@ -52,7 +52,7 @@ function updateSearch() {
   for (let i in searchs) searchwords.push(i);
 }
 
-function saveSearchs(items){
+function saveSearchs(items) {
   Setting.set('searchs', JSON.stringify(items));
 }
 
@@ -98,6 +98,7 @@ browser.omnibox.onInputChanged.addListener((input, suggest) => {
           description: '!' + ret.search + ' ' + ret.param
         }
       ])
+
     } else {
       browser.omnibox.setDefaultSuggestion({
         description: "Your bang is not found."
@@ -114,5 +115,5 @@ browser.omnibox.onInputEntered.addListener((text, disposition) => {
   } else {
     url = showLink(predefinedSearchs[args[0]], args.slice(1).join(" "));
   }
-      browser.tabs.update({ url });
+  browser.tabs.update({ url });
 });
