@@ -1,6 +1,22 @@
 var ext = browser.extension.getBackgroundPage();
 var Setting = ext.Setting;
-var searchs = JSON.parse(Setting.get('searchs'));
+
+var settingsList = {
+  searchs: "taArea",
+  useDdgFallback: "iuseDdgFallback"
+}
+
+function loadSettings() {
+  for (i in settingsList) {
+    document.getElementById(settingsList[i]).value = Setting.get(i)
+  }
+}
+
+function saveSettings(items) {
+  for (let i in items) {
+    Setting.set(i, items[i]);
+  }
+}
 
 document.getElementById('btnSave').addEventListener('click', () => {
   let result = {}, error = false;
@@ -11,14 +27,15 @@ document.getElementById('btnSave').addEventListener('click', () => {
     document.getElementById('resultArea').innerText = err;
   }
   if (!error) {
-    ext.saveSearchs(result);
+    saveSettings({
+      searchs: document.getElementById('taArea').value,
+      useDdgFallback: document.getElementById('iuseDdgFallback').checked
+    })
     document.getElementById('resultArea').innerText = "Success.";
     ext.updateSearch();
   }
 });
 
-document.getElementById('btnReload').addEventListener('click', () => {
-  document.getElementById('taArea').value = JSON.stringify(searchs);
-});
+document.getElementById('btnReload').addEventListener('click', () => { loadSettings(); });
 
-document.getElementById('taArea').value = JSON.stringify(searchs);
+loadSettings();

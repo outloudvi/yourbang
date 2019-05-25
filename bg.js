@@ -101,7 +101,7 @@ browser.omnibox.onInputChanged.addListener((input, suggest) => {
 
     } else {
       browser.omnibox.setDefaultSuggestion({
-        description: "Your bang is not found."
+        description: Setting.get("useDdgFallback") === "true" ? "Try DuckDuckGo's bang?" : "Your bang is not found."
       });
     }
   }
@@ -111,9 +111,14 @@ browser.omnibox.onInputEntered.addListener((text, disposition) => {
   let args = text.split(' ');
   let url = "https://duckduckgo.com";
   if (!searchs[args[0]]) {
+    if (Setting.get("useDdgFallback") === "true") {
     url = `https://duckduckgo.com/?q=!${args[0]}+${args.slice(1).join(" ")}`;
+      browser.tabs.update({ url });
+      return;
+    }
   } else {
     url = showLink(searchs[args[0]], args.slice(1).join(" "));
+    browser.tabs.update({ url });
+    return;
   }
-  browser.tabs.update({ url });
 });
