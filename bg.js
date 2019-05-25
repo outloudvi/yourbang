@@ -110,10 +110,10 @@ browser.omnibox.onInputChanged.addListener((input, suggest) => {
 browser.omnibox.onInputEntered.addListener((text, disposition) => {
   let args = text.split(' ');
   let url = "https://duckduckgo.com";
-  if (!predefinedSearchs[args[0]]) {
+  if (!searchs[args[0]]) {
     url = `https://duckduckgo.com/?q=!${args[0]}+${args.slice(1).join(" ")}`;
   } else {
-    url = showLink(predefinedSearchs[args[0]], args.slice(1).join(" "));
+    url = showLink(searchs[args[0]], args.slice(1).join(" "));
   }
   browser.tabs.update({ url });
 });
