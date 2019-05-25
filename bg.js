@@ -1,6 +1,6 @@
 "use strict";
 
-var Setting, searchs, searchwords, predefinedSearchs;
+var Setting, searchs = {}, searchwords = [];
 
 class Setting_Class {
   get(key) {
@@ -18,16 +18,16 @@ function showLink(url, param) {
 
 function splitInput(input) {
   let spl = input.split(' ');
-  if (spl.length === 1) {
-    return {
-      locked: false,
-      search: spl[0]
-    }
-  } else {
+  if (spl.length > 1) {
     return {
       locked: true,
       search: spl[0],
       param: spl.slice(1).join(' ')
+    }
+  } else {
+    return {
+      locked: false,
+      search: spl[0]
     }
   }
 }
@@ -48,24 +48,19 @@ function getMatchingProperties(input, searchwords) {
 
 function updateSearch() {
   searchs = JSON.parse(Setting.get('searchs'));
-  searchwords = [];
   for (let i in searchs) searchwords.push(i);
-}
-
-function saveSearchs(items) {
-  Setting.set('searchs', JSON.stringify(items));
 }
 
 function initial() {
   console.log('Welcome, newcomer!');
   Setting.set('firstrun', false);
-  saveSearchs(predefinedSearchs);
+  Setting.set('searchs', JSON.stringify(predefinedSearchs));
 }
 
 // -------------------------------------------------------------
 
 Setting = new Setting_Class();
-predefinedSearchs = {
+const predefinedSearchs = {
   "bili": "https://bilibili.com/video/%s",
   "baidu": "https://baidu.com/s?wd=%s",
   "zhwp": "https://zh.wikipedia.org/wiki/%s"
@@ -86,16 +81,20 @@ browser.omnibox.onInputStarted.addListener(() => {
 browser.omnibox.onInputChanged.addListener((input, suggest) => {
   let ret = splitInput(input);
   if (ret.locked === false) {
+    browser.omnibox.setDefaultSuggestion({
+      description: "Type your bang..."
+    });
     suggest(getMatchingProperties(input, searchwords));
   } else {
     if (searchs[ret.search]) {
       browser.omnibox.setDefaultSuggestion({
-        description: "Type your search..."
+        description: "Type your search terms..."
       });
+      console.log(showLink(searchs[ret.search], ret.param))
       suggest([
         {
           content: showLink(searchs[ret.search], ret.param),
-          description: '!' + ret.search + ' ' + ret.param
+          description: '! ' + ret.search + ' ' + ret.param
         }
       ])
 
@@ -112,7 +111,7 @@ browser.omnibox.onInputEntered.addListener((text, disposition) => {
   let url = "https://duckduckgo.com";
   if (!searchs[args[0]]) {
     if (Setting.get("useDdgFallback") === "true") {
-    url = `https://duckduckgo.com/?q=!${args[0]}+${args.slice(1).join(" ")}`;
+      url = `https://duckduckgo.com/?q=!${args[0]}+${args.slice(1).join(" ")}`;
       browser.tabs.update({ url });
       return;
     }
